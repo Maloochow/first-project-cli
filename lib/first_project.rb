@@ -1,6 +1,6 @@
-require "first_project/version"
+# require "first_project/version"
 
-module FirstProject
-  class Error < StandardError; end
-  # Your code goes here...
-end
+# module FirstProject
+#   class Error < StandardError; end
+#   # Your code goes here...
+# end
