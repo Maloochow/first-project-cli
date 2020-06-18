@@ -34,7 +34,7 @@ end
 def call_city(input)
     @city = City.new(input)
     if city.state == nil
-        puts "I don't understand this instruction. Let's try again."
+        puts "That's not what I was That's not what I was made for |(￣3￣)|try again."
         self.call
     else
     weather_attributes = city.current_weather
@@ -71,7 +71,7 @@ end
         elsif input2 == 'exit'
             puts "See you next time! ( ´ ▽ ` )"
         else
-            puts "I don't understand this instruction. Let's try again."
+            puts "That's not what I was made for |(￣3￣)| Let's try again."
             self.choose_park
         end
     end
@@ -85,7 +85,7 @@ end
         elsif input2 == 'exit'
             puts "See you next time! ( ´ ▽ ` )"
         else 
-        puts "I don't understand this instruction. Let's try again."
+        puts "That's not what I was made for |(￣3￣)| Let's try again."
         self.new_location
         end
     end
@@ -127,7 +127,7 @@ end
         elsif input3 == 'exit'
             puts "See you next time! ( ´ ▽ ` )"
         else
-            puts "I don't understand this instruction. Let's try again."
+            puts "That's not what I was made for |(￣3￣)| Let's try again."
             self.choose_park
         end
     end
