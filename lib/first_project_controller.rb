@@ -17,17 +17,16 @@ def call
 end
 
 def suitable_weather?(weather, temperature, humidity)
-    if weather == "Clear" || weather == "Cloud" || weather == "Rain"
+    # if weather == "Clear" || weather == "Cloud" || weather == "Rain"
         if temperature > 55 && temperature < 85
             if humidity == nil
                 true
             else
                 humidity < 80 ? true : false
             end
+        else
+            false
         end
-    else
-        false
-    end
 end
 
 

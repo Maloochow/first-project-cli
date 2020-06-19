@@ -30,19 +30,20 @@ module ParkImporter
         alert = get_park_alert(park_code)
         park_info_hash = {}
         park_info_hash["alert"] = []
-        if alert == nil
-            park_info_hash["alert"]
-        else
-            alert["data"][0].each do |hash|
-                park_info_hash["alert"] << {title: hash["title"], description: hash["description"], url: hash["url"]}
-            end
+        alert["data"].each do |hash|
+            park_info_hash["alert"] << {title: hash["title"], description: hash["description"], url: hash["url"]}
         end
         park_info_hash["name"] = hash["fulName"]
         park_info_hash["states"] = hash["states"]
         park_info_hash["description"] = hash["description"]
         park_info_hash["topics"] = hash["topics"].map {|i| i["name"]}
         park_info_hash["entranceFees"] = hash["entranceFees"][0]["description"]
+        # binding.pry
+        if hash["operatingHours"] == []
+            park_info_hash["standardHours"] = {"Availalbe Information": "None"}
+        else
         park_info_hash["standardHours"] = hash["operatingHours"][0]["standardHours"]
+        end
         park_info_hash
     end
 
@@ -54,7 +55,7 @@ module ParkImporter
         # alerts = self.park_alert_hash
         # park_o = get_park_hash(parkname)
         url_alert = ALERT_URL + "?parkCode=#{park_code}"
-        park_alert_hash(url_alert)[0]
+        park_alert_hash(url_alert)
     end
 
     def park_hash(url)
