@@ -13,9 +13,10 @@ class City
         #     @zipcode = identifier
         #     @state = state_code_by_zip(identifier)
         # else
-            @name = identifier
-            @id = city_id(identifier)
-            @state = state_code_by_city(identifier)
+
+            @name = format_city_name(identifier)
+            @id = city_id(@name)
+            @state = state_code_by_city(@name)
         # end
         @@all << self
         @weather_attributes = {}
@@ -23,18 +24,18 @@ class City
 
     def current_weather
         weather = WeatherImporter.new(city_id: self.id).get_weather_by_city
-        self.weather_attributes["weather"] = weather["wahr"][0]["dcripion"]
-        self.weather_attributes["temperature"] = k_to_f(weather["main"]["mp"]).to_i
-        self.weather_attributes["feel like temperature"] = k_to_f(weather["main"]["fl_lik"]).to_i
-        self.weather_attributes["highest temperature"] = k_to_f(weather["main"]["mp_max"]).to_i
-        self.weather_attributes["lowest temperature"] = k_to_f(weather["main"]["mp_min"]).to_i
-        self.weather_attributes["humidity level"] = weather["main"]["humidiy"]
-        self.weather_attributes["wind speed"] = weather["wind"]["pd"]
-        self.weather_attributes["wind degree"] = weather["wind"]["dg"]
+        self.weather_attributes["weather"] = weather["weather"][0]["description"]
+        self.weather_attributes["temperature"] = k_to_f(weather["main"]["temp"]).to_i
+        self.weather_attributes["feel like temperature"] = k_to_f(weather["main"]["feels_like"]).to_i
+        self.weather_attributes["highest temperature"] = k_to_f(weather["main"]["temp_max"]).to_i
+        self.weather_attributes["lowest temperature"] = k_to_f(weather["main"]["temp_min"]).to_i
+        self.weather_attributes["humidity level"] = weather["main"]["humidity"]
+        self.weather_attributes["wind speed"] = weather["wind"]["speed"]
+        self.weather_attributes["wind degree"] = weather["wind"]["deg"]
         self.weather_attributes
     end
 
-    def parks_list
+    def create_parks_list
         parks_by_state(state_code: self.state)
     end
 

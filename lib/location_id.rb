@@ -6,14 +6,21 @@ require 'json'
 require_relative './weather_importer.rb'
 
 module Findable
-    ZIP_URL = "https://vanitysoft-boundaries-io-v1.p.rapidapi.com/reaperfire/rest/v1/public/boundary?zipcode="
-    
+    # ZIP_URL = "https://vanitysoft-boundaries-io-v1.p.rapidapi.com/reaperfire/rest/v1/public/boundary?zipcode="
+    def format_city_name(name)
+        file = File.read('db/city.list.json')
+        data_hash = JSON.parse(file)
+        city_o = data_hash.find {|hash| hash["name"].downcase == name.downcase}
+        # binding.pry
+        city_o ? city_o["name"] : nil
+    end
+
     def city_id(name)
         file = File.read('db/city.list.json')
         data_hash = JSON.parse(file)
         city_o = data_hash.find {|hash| hash["name"] == name}
         # binding.pry
-        city_o ? city_o["id"] : "Sorry, the location you entered is out of my scope (＞人＜;)"
+        city_o ? city_o["id"] : nil
     end
     
     def state_code_by_city(name)

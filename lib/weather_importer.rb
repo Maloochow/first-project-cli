@@ -39,7 +39,7 @@ attr_reader :city_id, :zip_code
         request["x-rapidapi-key"] = 'b863098360mshb385b458118490ap193c86jsn956ad95a914b'
         
         response = http.request(request)
-        weather = JSON.parse(response.body.tr('test()', ''))
+        weather = JSON.parse(response.body[5..-2])
     end
     
     # sample urls
