@@ -4,22 +4,44 @@ require_relative './weather_importer.rb'
 
 class City
     include Findable, ParkImporter
-    attr_reader :zipcode, :id, :name, :state
+    # extend Findable::ClassMethod
+    attr_reader :zipcode, :id, :name, :state, :city_o, :cities
     attr_accessor :weather_attributes
     @@all = []
 
-    def initialize(identifier)
-        # if identifier.to_i > 0
-        #     @zipcode = identifier
-        #     @state = state_code_by_zip(identifier)
-        # else
+    def initialize(name:, state: nil)
+        if state == nil
+            array = city_objects(name)
+            if array.count == 1
+                @city_o = array[0]
+                @name = city_o["name"]
+                @id = city_o["id"]
+                @state = city_o["state"]
+                @@all << self
+                @weather_attributes = {}
+            elsif array.count == 0
+                @city_o = nil
+            else
+                @city_o = array
+            end
+        else
+            @city_o = find_city(name, state)
+            @name = city_o["name"]
+            @id = city_o["id"]
+            @state = city_o["state"]
+            @@all << self
+            @weather_attributes = {}
+        end
+        @city_o
+            # if identifier.to_i > 0
+            #     @zipcode = identifier
+            #     @state = state_code_by_zip(identifier)
+            # else
+            # end
+    end
 
-            @name = format_city_name(identifier)
-            @id = city_id(@name)
-            @state = state_code_by_city(@name)
-        # end
-        @@all << self
-        @weather_attributes = {}
+    def self.create(input_name, input_state)
+        City.new(name: input_name, state: input_state)
     end
 
     def current_weather

@@ -7,37 +7,45 @@ require_relative './weather_importer.rb'
 
 module Findable
     # ZIP_URL = "https://vanitysoft-boundaries-io-v1.p.rapidapi.com/reaperfire/rest/v1/public/boundary?zipcode="
-    def format_city_name(name)
+    def city_objects(name)
         file = File.read('db/city.list.json')
         data_hash = JSON.parse(file)
-        city_o = data_hash.find {|hash| hash["name"].downcase == name.downcase}
+        city_o = data_hash.select {|hash| hash["name"].downcase == name.downcase && hash["country"] == "US"}
         # binding.pry
-        city_o ? city_o["name"] : nil
+        # city_o ? city_o["id"] : nil
     end
 
-    def city_id(name)
+    def find_city(input_name, input_state)
         file = File.read('db/city.list.json')
         data_hash = JSON.parse(file)
-        city_o = data_hash.find {|hash| hash["name"] == name}
-        # binding.pry
-        city_o ? city_o["id"] : nil
+        array = data_hash.select {|hash| hash["name"].downcase == input_name.downcase && hash["country"] == "US"}
+        array.find {|hash| hash["state"] == input_state}
     end
+
+    # def format_city_name(name)
+    #     file = File.read('db/city.list.json')
+    #     data_hash = JSON.parse(file)
+    #     city_o = data_hash.find {|hash| hash["name"].downcase == name.downcase}
+    #     # binding.pry
+    #     city_o ? city_o["name"] : nil
+    # end
+
     
-    def state_code_by_city(name)
-        file = File.read('db/city.list.json')
-        data_hash = JSON.parse(file)
-        city_o = data_hash.find {|hash| hash["name"] == name}
-        city_o ? city_o["state"] : nil
-    end
+    # def state_code_by_city(name)
+    #     file = File.read('db/city.list.json')
+    #     data_hash = JSON.parse(file)
+    #     city_o = data_hash.find {|hash| hash["name"] == name && hash["country"] == "US"}
+    #     city_o ? city_o["state"] : nil
+    # end
     
-    def state_code_by_zip(zipcode)
-        w = WeatherImporter.new(zip_code: zipcode)
-        city_s = w.get_weather_by_zip["nam"]
-        file = File.read('db/city.list.json')
-        data_hash = JSON.parse(file)
-        city_o = data_hash.select {|hash| hash["name"][0,2] == city_s[0,2] && hash["name"][-5,5] == city_s[-5,5]}
-        binding.pry
-        city_o["state"]
+    # def state_code_by_zip(zipcode)
+    #     w = WeatherImporter.new(zip_code: zipcode)
+    #     city_s = w.get_weather_by_zip["nam"]
+    #     file = File.read('db/city.list.json')
+    #     data_hash = JSON.parse(file)
+    #     city_o = data_hash.select {|hash| hash["name"][0,2] == city_s[0,2] && hash["name"][-5,5] == city_s[-5,5]}
+    #     binding.pry
+    #     city_o["state"]
 
         # url = URI(ZIP_URL + "#{zipcode}")
         # # url = URI("https://vanitysoft-boundaries-io-v1.p.rapidapi.com/reaperfire/rest/v1/public/boundary?zipcode=10002")
@@ -55,7 +63,7 @@ module Findable
         # i = response_j["features"][0]["properties"]["state"]
         # i ? i : "Sorry, the location you entered is out of my scope (＞人＜;)"
 
-    end
+    # end
         
         
         

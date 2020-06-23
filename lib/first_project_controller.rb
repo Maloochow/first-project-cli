@@ -3,7 +3,7 @@ require_relative '../config/environment'
 
 class Controller
 
-attr_reader :city
+attr_accessor :city
 
 def call
     puts "Welcome to the Healthy Weather Station ٩( 'ω' )و"
@@ -20,8 +20,8 @@ def new_location
         puts "See you next time! ( ´ ▽ ` )"
         input_invalid = false
     else
-        @city = City.new(input)
-        if city.state == nil || city.state == ""
+        @city = City.new(name: input)
+        if city == nil
         puts "That's not what I was made for |(￣3￣)| let's try again."
         else
         self.call_city
@@ -33,7 +33,7 @@ end
 
 def suitable_weather?(weather, temperature, humidity)
     # if weather == "Clear" || weather == "Cloud" || weather == "Rain"
-        if temperature > 55 && temperature < 85
+        if temperature > 54 && temperature < 86
             if humidity == nil
                 true
             else
@@ -44,13 +44,43 @@ def suitable_weather?(weather, temperature, humidity)
         end
 end
 
+def city_array?
+    city_o = city.city_o
+    if city_o.class == Array
+        puts "There are multiple cities under this name _φ(･_･"
+        city_o.each_with_index do |c, i|
+            puts "#{i + 1}. #{c["name"]}, #{c["state"]}"
+        end
+        input_invalid = true
+        until input_invalid == false
+        puts "Please enter the city number to check the current weather:"
+        puts "(Type 'back' to enter a different city)"
+        input = gets.strip
+        if input == "back"
+            self.new_location
+            input_invalid = false
+        elsif input.to_i > 0 && input.to_i <= city_o.length
+            city_name = city_o[input.to_i - 1]["name"]
+            city_state = city_o[input.to_i - 1]["state"]
+            @city = City.create(city_name, city_state)
+            input_invalid = false
+        else
+            puts "That's not what I was made for |(￣3￣)| let's try again."
+        end
+        end
+    else
+        nil
+    end
+end
+
 
 def call_city
+    self.city_array?
     weather_attributes = city.current_weather
     weather = weather_attributes["weather"]
     temperature = weather_attributes["temperature"]
     humidity = weather_attributes["humidity level"]
-    puts " - The current weather of #{city.name} is #{weather}"
+    puts " - The current weather of #{city.name}, #{city.state} is #{weather}"
     puts " - The temperature is #{temperature}F, but it feels more like #{weather_attributes["feel like temperature"]}F"
     puts " - The lowest temperature of the day is #{weather_attributes["lowest temperature"]}F, and the highest temperature is #{weather_attributes["highest temperature"]}F"
     puts " - The humidity is #{humidity}%, and the wind is #{weather_attributes["wind speed"]}km/h"
@@ -65,30 +95,32 @@ def call_city
     end
 end
 
-    def choose_park
-        city.state_park_names.each_with_index do |park, index|
-            puts "#{index + 1}. #{park}"
-        end
-        input_invalid = true
-        until input_invalid == false
-        puts "   - Enter the park number to learn more about the park"
-        puts "   - Or type 'back' to enter a new location"
-        puts "   - To quit, type 'exit'"
-        input2 = gets.strip
-        if input2 == 'back'
-            self.new_location
-            input_invalid = false
-        elsif input2.to_i > 0 && input2.to_i <= city.state_park_names.length
-            self.print_park(input2)
-            input_invalid = false
-        elsif input2 == 'exit'
-            puts "See you next time! ( ´ ▽ ` )"
-            input_invalid = false
-        else
-            puts "That's not what I was made for |(￣3￣)| Let's try again."
-        end
+
+
+def choose_park
+    city.state_park_names.each_with_index do |park, index|
+        puts "#{index + 1}. #{park}"
     end
+    input_invalid = true
+    until input_invalid == false
+    puts "   - Enter the park number to learn more about the park"
+    puts "   - Or type 'back' to enter a new location"
+    puts "   - To quit, type 'exit'"
+    input2 = gets.strip
+    if input2 == 'back'
+        self.new_location
+        input_invalid = false
+    elsif input2.to_i > 0 && input2.to_i <= city.state_park_names.length
+        self.print_park(input2)
+        input_invalid = false
+    elsif input2 == 'exit'
+        puts "See you next time! ( ´ ▽ ` )"
+        input_invalid = false
+    else
+        puts "That's not what I was made for |(￣3￣)| Let's try again."
     end
+end
+end
 
     # def new_location
     #     puts "Please type 'back' to enter a new location"
