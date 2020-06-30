@@ -3,11 +3,11 @@ require 'rest-client'
 require 'json'
 
 module ParkImporter
-
-
+    
+    
     BASE_URL = 'https://developer.nps.gov/api/v1/parks'
     ALERT_URL = 'https://developer.nps.gov/api/v1/alerts'
- 
+    
     
     def parks_by_state(state_code:)
         url = BASE_URL + "?stateCode=#{state_code}"

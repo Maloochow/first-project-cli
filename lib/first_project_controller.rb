@@ -15,7 +15,7 @@ def new_location
     until input_invalid == false
     puts "Please enter a city name from the U.S. to check local weather:"
     puts "(Type 'exit' to quit)"
-    input = gets.strip
+    input = gets.strip.downcase
     if input == "exit"
         puts "See you next time! ( ´ ▽ ` )"
         input_invalid = false
@@ -55,7 +55,7 @@ def city_array?
         until input_invalid == false
         puts "Please enter the city number to check the current weather:"
         puts "(Type 'back' to enter a different city)"
-        input = gets.strip
+        input = gets.strip.downcase
         if input == "back"
             self.new_location
             input_invalid = false
@@ -106,7 +106,7 @@ def choose_park
     puts "   - Enter the park number to learn more about the park"
     puts "   - Or type 'back' to enter a new location"
     puts "   - To quit, type 'exit'"
-    input2 = gets.strip
+    input2 = gets.strip.downcase
     if input2 == 'back'
         self.new_location
         input_invalid = false
@@ -165,7 +165,7 @@ end
         puts "   - Type 'back' to choose a different park"
         puts "   - Or type 'city' to enter a new location"
         puts "   - To quit, type 'exit'"
-        input3 = gets.strip
+        input3 = gets.strip.downcase
         if input3 == 'back'
             self.choose_park
             input_invalid = false

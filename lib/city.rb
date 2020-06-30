@@ -5,7 +5,7 @@ require_relative './weather_importer.rb'
 class City
     include Findable, ParkImporter
     # extend Findable::ClassMethod
-    attr_reader :zipcode, :id, :name, :state, :city_o, :cities
+    attr_reader :zipcode, :id, :name, :state, :city_o
     attr_accessor :weather_attributes
     @@all = []
 
@@ -40,6 +40,10 @@ class City
             # end
     end
 
+    def self.all
+        @@all
+    end
+
     def self.create(input_name, input_state)
         City.new(name: input_name, state: input_state)
     end
@@ -58,7 +62,12 @@ class City
     end
 
     def create_parks_list
+        previous_city = self.class.all[-2]
+        if previous_city != nil && self.state == previous_city.state
+            nil
+        else
         parks_by_state(state_code: self.state)
+        end
     end
 
     def k_to_f(number)
